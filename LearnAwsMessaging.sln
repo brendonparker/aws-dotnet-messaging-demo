@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35013.160
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LearnAwsMessaging.Api", "LearnAwsMessaging.Api\LearnAwsMessaging.Api.csproj", "{F4D7BBFE-4983-466D-8F2F-CCC33FB57AF4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearnAwsMessaging.Consumer", "LearnAwsMessaging.Consumer\LearnAwsMessaging.Consumer.csproj", "{0F54174C-B954-4CEC-96E0-D28B3E23CD65}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearnAwsMessaging.Contracts", "LearnAwsMessaging.Contracts\LearnAwsMessaging.Contracts.csproj", "{497AE89F-E69D-4125-A47A-F83316818197}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F4D7BBFE-4983-466D-8F2F-CCC33FB57AF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4D7BBFE-4983-466D-8F2F-CCC33FB57AF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4D7BBFE-4983-466D-8F2F-CCC33FB57AF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4D7BBFE-4983-466D-8F2F-CCC33FB57AF4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F54174C-B954-4CEC-96E0-D28B3E23CD65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F54174C-B954-4CEC-96E0-D28B3E23CD65}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F54174C-B954-4CEC-96E0-D28B3E23CD65}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F54174C-B954-4CEC-96E0-D28B3E23CD65}.Release|Any CPU.Build.0 = Release|Any CPU
+		{497AE89F-E69D-4125-A47A-F83316818197}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{497AE89F-E69D-4125-A47A-F83316818197}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{497AE89F-E69D-4125-A47A-F83316818197}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{497AE89F-E69D-4125-A47A-F83316818197}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4396D5CA-2461-4D0A-B7C4-E589FBE7965B}
+	EndGlobalSection
+EndGlobal
