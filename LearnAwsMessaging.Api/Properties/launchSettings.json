@@ -28,7 +28,9 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "AWS_PROFILE": "default",
-        "AWS_REGION": "us-east-2"
+        "AWS_REGION": "us-east-2",
+        "AWS_ACCOUNT_ID": "01234567",
+        "AWS_REGION_ID": "us-east-2"
       }
     },
     "IIS Express": {

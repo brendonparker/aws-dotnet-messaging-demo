@@ -3,10 +3,6 @@ using Amazon.Lambda.SQSEvents;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using AWS.Messaging.Lambda;
-using AWS.Messaging.Publishers.SQS;
-using LearnAwsMessaging.Consumer.Handlers;
-using LearnAwsMessaging.Consumer.Handlers.BackgroundJob;
-using LearnAwsMessaging.Contracts;
 
 namespace LearnAwsMessaging.Consumer;
 
@@ -21,20 +17,13 @@ public class Function
             .AddAWSMessageBus(builder =>
             {
                 builder.AddDemoMessages();
-                builder.AddMessageHandler<HelloMessageHandler, HelloMessage>();
-                builder.AddMessageHandler<StartJobHandler, StartJob>();
-                builder.AddMessageHandler<JobStartedHandler, JobStarted>();
-                builder.AddMessageHandler<DownloadReceiptsHandler, DownloadReceipts>();
-                builder.AddMessageHandler<ReceiptsDownloadedHandler, ReceiptsDownloaded>();
-                builder.AddMessageHandler<SalesDownloadedHandler, SalesDownloaded>();
-                builder.AddMessageHandler<DownloadSalesHandler, DownloadSales>();
+                builder.AddDemoMessageHandlers();
                 builder.AddLambdaMessageProcessor(options =>
                 {
                     options.MaxNumberOfConcurrentMessages = 1;
                 });
             })
             .AddAWSMessagingCustomizations()
-            .AddSingleton<ISQSMiddleware, TenantSQSMiddleware>()
             .BuildServiceProvider();
     }
 

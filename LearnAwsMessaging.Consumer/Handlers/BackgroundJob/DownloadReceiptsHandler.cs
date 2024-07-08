@@ -14,7 +14,7 @@ public class DownloadReceiptsHandler(
         log.LogInformation("Handling: {Type}", messageEnvelope.Message.GetType());
 
         // Simulating work to "download receipts from some external system"
-        await Task.Delay(20);
+        await Task.Delay(20, token);
 
         await publisher.PublishAsync(new ReceiptsDownloaded
         {

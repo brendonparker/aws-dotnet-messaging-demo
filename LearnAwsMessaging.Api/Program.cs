@@ -1,4 +1,5 @@
 using AWS.Messaging;
+using LearnAwsMessaging.Api;
 using LearnAwsMessaging.Consumer;
 using LearnAwsMessaging.Contracts;
 using Microsoft.AspNetCore.Mvc;
@@ -6,8 +7,23 @@ using Microsoft.AspNetCore.Mvc;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAWSLambdaHosting(LambdaEventSource.HttpApi);
-builder.Services.AddAWSMessageBus(builder => { builder.AddDemoMessages(); });
+builder.Services.AddAWSMessageBus(messageBus =>
+{
+    messageBus.AddDemoMessages();
+    if (builder.Environment.IsDevelopment())
+    {
+        messageBus.AddDemoMessageHandlers();
+        messageBus.AddLambdaMessageProcessor(options =>
+        {
+            options.MaxNumberOfConcurrentMessages = 1;
+        });
+    }
+});
 builder.Services.AddAWSMessagingCustomizations();
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddLocalDevelopmentServices();
+}
 var app = builder.Build();
 
 app.MapGet("/", async ([FromServices] IMessagePublisher publisher, [FromQuery] string? tenantId = null) =>
