@@ -82,6 +82,10 @@ export class AwsMessagingSampleStackSampleStack extends cdk.Stack {
       timeout: cdk.Duration.minutes(3),
       handler:
         "LearnAwsMessaging.Consumer::LearnAwsMessaging.Consumer.Function::FunctionHandler",
+      environment: {
+        AWS_ACCOUNT_ID: this.account,
+        AWS_REGION_ID: this.region,
+      },
     });
 
     const lambdaApi = new lmbda.Function(this, "Lambda", {
@@ -92,6 +96,10 @@ export class AwsMessagingSampleStackSampleStack extends cdk.Stack {
       handler: "LearnAwsMessaging.Api",
       functionName: `${prefix}-api`,
       timeout: cdk.Duration.seconds(30),
+      environment: {
+        AWS_ACCOUNT_ID: this.account,
+        AWS_REGION_ID: this.region,
+      },
     });
 
     lambdaApi.role?.addToPrincipalPolicy(

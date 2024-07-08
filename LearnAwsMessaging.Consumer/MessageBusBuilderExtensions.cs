@@ -15,7 +15,8 @@ public static class MessageBusBuilderExtensions
         // FIFO messages
         builder.AddSqsQueue("aws-msg-demo.fifo")
             .RouteMessageType<DownloadSales>()
-            .RouteMessageType<DownloadReceipts>();
+            .RouteMessageType<DownloadReceipts>()
+            .AddMiddleware<TenantSQSMiddleware>();
 
         // SNS Notifications
         builder.AddSnsTopic("aws-msg-demo-job-started").RouteMessageType<JobStarted>();

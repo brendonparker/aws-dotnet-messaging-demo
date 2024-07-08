@@ -7,6 +7,7 @@ using Amazon.SQS.Model;
 using AWS.Messaging.Configuration;
 using AWS.Messaging.Serialization;
 using AWS.Messaging.Telemetry;
+using LearnAwsMessaging.Consumer.AWSMessagingCustomization;
 using Microsoft.Extensions.Logging;
 
 namespace AWS.Messaging.Publishers.SQS;
@@ -21,7 +22,7 @@ internal class CustomSQSPublisher : ISQSPublisher
     private readonly IMessageConfiguration _messageConfiguration;
     private readonly IEnvelopeSerializer _envelopeSerializer;
     private readonly ITelemetryFactory _telemetryFactory;
-    private readonly IEnumerable<ISQSMiddleware> _middlewares;
+    private readonly ISQSMiddlewareProvider _middlewareProvider;
     private IAmazonSQS? _sqsClient;
 
     private const string FIFO_SUFFIX = ".fifo";
@@ -35,14 +36,14 @@ internal class CustomSQSPublisher : ISQSPublisher
         IMessageConfiguration messageConfiguration,
         IEnvelopeSerializer envelopeSerializer,
         ITelemetryFactory telemetryFactory,
-        IEnumerable<ISQSMiddleware> middlewares)
+        ISQSMiddlewareProvider middlewareProvider)
     {
         _awsClientProvider = awsClientProvider;
         _logger = logger;
         _messageConfiguration = messageConfiguration;
         _envelopeSerializer = envelopeSerializer;
         _telemetryFactory = telemetryFactory;
-        _middlewares = middlewares;
+        _middlewareProvider = middlewareProvider;
     }
 
     /// <summary>
@@ -87,7 +88,7 @@ internal class CustomSQSPublisher : ISQSPublisher
                 
                 var queueUrl = GetPublisherEndpoint(trace, typeof(T), sqsOptions);
                 
-                foreach (var middleware in _middlewares)
+                foreach (var middleware in _middlewareProvider.Resolve(queueUrl))
                 {
                     sqsOptions = await middleware.HandleAsync(queueUrl, message, sqsOptions);
                 }

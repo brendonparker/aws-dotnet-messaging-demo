@@ -2,6 +2,7 @@ using System.Reflection;
 using AWS.Messaging;
 using AWS.Messaging.Configuration;
 using AWS.Messaging.Publishers.SQS;
+using LearnAwsMessaging.Consumer.AWSMessagingCustomization;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace LearnAwsMessaging.Consumer;
@@ -32,7 +33,7 @@ public static class ServiceCollectionExtensions
 
             throw new InvalidOperationException("Something went wrong");
         });
-        services.AddSingleton<ISQSMiddleware, TenantSQSMiddleware>();
+        services.AddSingleton<ISQSMiddlewareProvider, SQSMiddlewareProvider>();
         return services;
     }
 }

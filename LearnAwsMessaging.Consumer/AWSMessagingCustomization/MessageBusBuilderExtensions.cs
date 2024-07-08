@@ -1,12 +1,14 @@
 using AWS.Messaging.Configuration;
+using AWS.Messaging.Publishers.SQS;
 using LearnAwsMessaging.Contracts;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace AWS.Messaging.Configuration;
 
 public static class MessageBusBuilderExtensions
 {
-    const string ACCOUNT_ID = "0123456789";
-    const string REGION_ID = "us-east-1";
+    private static readonly string ACCOUNT_ID = Environment.GetEnvironmentVariable("AWS_ACCOUNT_ID") ?? "";
+    private static readonly string REGION_ID = Environment.GetEnvironmentVariable("AWS_REGION_ID") ?? "";
 
     public static SNSPublisherHelper AddSnsTopic(this MessageBusBuilder builder, string topicNameOrArn) =>
         new(builder, topicNameOrArn);
@@ -50,6 +52,13 @@ public static class MessageBusBuilderExtensions
         public SQSPublisherHelper RouteMessageType<T>()
         {
             _builder.AddSQSPublisher<T>(_queueUrl);
+            return this;
+        }
+
+        public SQSPublisherHelper AddMiddleware<TMiddleware>() where TMiddleware : ISQSMiddleware
+        {
+            _builder.AddAdditionalService(new ServiceDescriptor(typeof(ISQSMiddleware), _queueUrl, typeof(TMiddleware),
+                ServiceLifetime.Singleton));
             return this;
         }
     }
