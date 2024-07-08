@@ -1,5 +1,4 @@
 using AWS.Messaging;
-using AWS.Messaging.Publishers.SQS;
 using LearnAwsMessaging.Consumer;
 using LearnAwsMessaging.Contracts;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +13,7 @@ var app = builder.Build();
 app.MapGet("/", async ([FromServices] IMessagePublisher publisher, [FromQuery] string? tenantId = null) =>
 {
     await publisher.PublishAsync(new HelloMessage { Name = "World!", TenantId = tenantId ?? "Acme" });
-    return "Message Published";
+    return "Message Published. Try /startjob ";
 });
 
 app.MapGet("/startjob", async ([FromServices] IMessagePublisher publisher, [FromQuery] string? tenantId = null) =>
