@@ -100,6 +100,7 @@ manipulate `_publisherTypeMapping`, replacing `SQSPublisher` with my custom `Cus
 copy/paste of the original, but with the middleware added in.
 
 I can then leverage my enhancements from above to make the middleware queue-specific in a fairly fluent syntax:
+
 ```csharp
 // FIFO messages
 builder.AddSqsQueue("aws-msg-demo.fifo")
@@ -107,6 +108,23 @@ builder.AddSqsQueue("aws-msg-demo.fifo")
    .RouteMessageType<DownloadReceipts>()
    .AddMiddleware<TenantSQSMiddleware>();
 ```
+
+## Bonus: Local Development
+
+What if I want to develop locally without needing to setup something like localstack or some other heavy third party
+dependency?
+How do I test my message handlers in my local dev environment if the queues are being consumed by lambda integrations?
+
+My solution to this was to create a background service (`LocalDevBackgroundService`) which only kicks in when running in
+debug/Development mode. Additionally, when in this mode, I sub in my own `IAmazonSQS`
+and `IAmazonSimpleNotificationService` implementations which push things into this `LocalDevBackgroundService` for
+processing. The `LocalDevBackgroundService` can use the already existing `ILambdaMessaging` implementation to process the
+messages, just like if it were a lambda processing SQS messages.
+
+This approach works fine in this demo, but is incomplete as it assumes all sns topics and sqs messages are going to be
+processed by the same consumer. More work would need to be done to give this more intelligence. The AWS.Messaging
+library currently relies on the plumbing set outside of this code to know how to route SNS messages to SQS queues, for
+example.
 
 ## Deploy Instructions
 
