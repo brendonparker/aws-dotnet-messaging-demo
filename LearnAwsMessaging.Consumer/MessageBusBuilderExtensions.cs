@@ -1,3 +1,5 @@
+using System.Reflection;
+using AWS.Messaging;
 using AWS.Messaging.Configuration;
 using LearnAwsMessaging.Consumer.Handlers;
 using LearnAwsMessaging.Consumer.Handlers.BackgroundJob;
@@ -28,15 +30,32 @@ public static class MessageBusBuilderExtensions
         return builder;
     }
 
-    public static MessageBusBuilder AddDemoMessageHandlers(this MessageBusBuilder builder)
+    public static MessageBusBuilder AddMessageHandlers(this MessageBusBuilder builder, Assembly assembly)
     {
-        builder.AddMessageHandler<HelloMessageHandler, HelloMessage>();
-        builder.AddMessageHandler<StartJobHandler, StartJob>();
-        builder.AddMessageHandler<JobStartedHandler, JobStarted>();
-        builder.AddMessageHandler<DownloadReceiptsHandler, DownloadReceipts>();
-        builder.AddMessageHandler<ReceiptsDownloadedHandler, ReceiptsDownloaded>();
-        builder.AddMessageHandler<SalesDownloadedHandler, SalesDownloaded>();
-        builder.AddMessageHandler<DownloadSalesHandler, DownloadSales>();
+        var handlerInterfaceType = typeof(IMessageHandler<>);
+
+        var types = assembly.GetTypes()
+            .Where(type => type is { IsAbstract: false, IsInterface: false })
+            .Select(type => new
+            {
+                ImplementationType = type,
+                InterfaceTypes = type.GetInterfaces()
+                    .Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == handlerInterfaceType)
+                    .ToList()
+            })
+            .Where(t => t.InterfaceTypes.Count != 0)
+            .ToList();
+
+        var methodInfo = typeof(MessageBusBuilder).GetMethod(nameof(MessageBusBuilder.AddMessageHandler));
+        foreach (var type in types)
+        {
+            foreach (var interfaceType in type.InterfaceTypes)
+            {
+                var genericMethod =
+                    methodInfo?.MakeGenericMethod([type.ImplementationType, interfaceType.GetGenericArguments()[0]]);
+                genericMethod?.Invoke(builder, [null]);
+            }
+        }
 
         return builder;
     }

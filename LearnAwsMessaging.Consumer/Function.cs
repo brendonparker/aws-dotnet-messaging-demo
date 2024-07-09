@@ -19,7 +19,7 @@ public class Function
             .AddAWSMessageBus(builder =>
             {
                 builder.AddDemoMessages();
-                builder.AddDemoMessageHandlers();
+                builder.AddMessageHandlers(typeof(Function).Assembly);
                 builder.AddLambdaMessageProcessor(options => { options.MaxNumberOfConcurrentMessages = 1; });
             })
             .AddAWSMessagingCustomizations()

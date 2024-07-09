@@ -12,7 +12,7 @@ builder.Services.AddAWSMessageBus(messageBus =>
     messageBus.AddDemoMessages();
     if (builder.Environment.IsDevelopment())
     {
-        messageBus.AddDemoMessageHandlers();
+        messageBus.AddMessageHandlers(typeof(Function).Assembly);
         messageBus.AddLambdaMessageProcessor(options =>
         {
             options.MaxNumberOfConcurrentMessages = 1;
