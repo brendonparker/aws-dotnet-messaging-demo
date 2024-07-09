@@ -7,7 +7,6 @@ using Amazon.SQS.Model;
 using AWS.Messaging.Configuration;
 using AWS.Messaging.Serialization;
 using AWS.Messaging.Telemetry;
-using LearnAwsMessaging.Consumer.AWSMessagingCustomization;
 using Microsoft.Extensions.Logging;
 
 namespace AWS.Messaging.Publishers.SQS;

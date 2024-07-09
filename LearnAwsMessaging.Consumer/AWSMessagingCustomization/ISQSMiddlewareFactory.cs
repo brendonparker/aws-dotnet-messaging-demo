@@ -1,6 +1,6 @@
 using AWS.Messaging.Publishers.SQS;
 
-namespace LearnAwsMessaging.Consumer.AWSMessagingCustomization;
+namespace AWS.Messaging.Publishers.SQS;
 
 public interface ISQSMiddlewareProvider
 {

@@ -2,7 +2,6 @@ using System.Reflection;
 using AWS.Messaging;
 using AWS.Messaging.Configuration;
 using AWS.Messaging.Publishers.SQS;
-using LearnAwsMessaging.Consumer.AWSMessagingCustomization;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace LearnAwsMessaging.Consumer;

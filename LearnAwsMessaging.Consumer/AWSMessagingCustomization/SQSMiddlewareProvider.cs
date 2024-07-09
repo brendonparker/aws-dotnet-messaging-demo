@@ -1,8 +1,7 @@
 using System.Collections.Concurrent;
-using AWS.Messaging.Publishers.SQS;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace LearnAwsMessaging.Consumer.AWSMessagingCustomization;
+namespace AWS.Messaging.Publishers.SQS;
 
 public class SQSMiddlewareProvider(IServiceProvider serviceProvider) : ISQSMiddlewareProvider
 {
