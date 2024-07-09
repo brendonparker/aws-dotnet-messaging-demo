@@ -1,6 +1,6 @@
 namespace LearnAwsMessaging.Contracts;
 
-public sealed class SalesDownloaded
+public sealed record SalesDownloaded
 {
     public required string TenantId { get; init; }
     public required string JobId { get; init; }
