@@ -1,38 +1,37 @@
-﻿using Amazon.Lambda.Core;
+﻿using System.Text.Json.Serialization;
+using Amazon.Lambda.Core;
+using Amazon.Lambda.Serialization.SystemTextJson;
 using Amazon.Lambda.SQSEvents;
+using AWS.Messaging.Lambda;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using AWS.Messaging.Lambda;
 
 namespace LearnAwsMessaging.Consumer;
 
 public class Function
 {
-    private readonly ServiceProvider _serviceProvider;
+    private readonly ILambdaMessaging _lambdaMessaging;
 
     public Function()
     {
-        _serviceProvider = new ServiceCollection()
+        var serviceProvider = new ServiceCollection()
             .AddLogging(x => x.AddConsole())
             .AddAWSMessageBus(builder =>
             {
                 builder.AddDemoMessages();
                 builder.AddDemoMessageHandlers();
-                builder.AddLambdaMessageProcessor(options =>
-                {
-                    options.MaxNumberOfConcurrentMessages = 1;
-                });
+                builder.AddLambdaMessageProcessor(options => { options.MaxNumberOfConcurrentMessages = 1; });
             })
             .AddAWSMessagingCustomizations()
             .BuildServiceProvider();
+        _lambdaMessaging = serviceProvider.GetRequiredService<ILambdaMessaging>();
     }
 
-    public async Task<SQSBatchResponse> FunctionHandler(SQSEvent input, ILambdaContext context)
-    {
-        using var scope = _serviceProvider.CreateScope();
-
-        var messaging = scope.ServiceProvider.GetRequiredService<ILambdaMessaging>();
-
-        return await messaging.ProcessLambdaEventWithBatchResponseAsync(input, context);
-    }
+    [LambdaSerializer(typeof(SourceGeneratorLambdaJsonSerializer<CustomJsonSerializerContext>))]
+    public async Task<SQSBatchResponse> FunctionHandler(SQSEvent input, ILambdaContext context) =>
+        await _lambdaMessaging.ProcessLambdaEventWithBatchResponseAsync(input, context);
 }
+
+[JsonSerializable(typeof(SQSEvent))]
+[JsonSerializable(typeof(SQSBatchResponse))]
+internal partial class CustomJsonSerializerContext : JsonSerializerContext;

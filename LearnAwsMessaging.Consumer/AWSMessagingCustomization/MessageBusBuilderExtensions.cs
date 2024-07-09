@@ -1,6 +1,4 @@
-using AWS.Messaging.Configuration;
 using AWS.Messaging.Publishers.SQS;
-using LearnAwsMessaging.Contracts;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AWS.Messaging.Configuration;
@@ -57,8 +55,11 @@ public static class MessageBusBuilderExtensions
 
         public SQSPublisherHelper AddMiddleware<TMiddleware>() where TMiddleware : ISQSMiddleware
         {
-            _builder.AddAdditionalService(new ServiceDescriptor(typeof(ISQSMiddleware), _queueUrl, typeof(TMiddleware),
-                ServiceLifetime.Singleton));
+            _builder.AddAdditionalService(new ServiceDescriptor(
+                serviceType: typeof(ISQSMiddleware),
+                serviceKey: _queueUrl,
+                implementationType: typeof(TMiddleware),
+                lifetime: ServiceLifetime.Singleton));
             return this;
         }
     }

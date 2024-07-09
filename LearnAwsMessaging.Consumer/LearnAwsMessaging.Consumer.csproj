@@ -17,6 +17,7 @@
 		<PackageReference Include="AWS.Messaging.Lambda" Version="0.9.1" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+		<PackageReference Include="Stateless" Version="5.16.0" />
 	</ItemGroup>
 
 	<ItemGroup>
