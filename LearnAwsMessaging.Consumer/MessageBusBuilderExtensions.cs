@@ -1,8 +1,6 @@
 using System.Reflection;
 using AWS.Messaging;
 using AWS.Messaging.Configuration;
-using LearnAwsMessaging.Consumer.Handlers;
-using LearnAwsMessaging.Consumer.Handlers.BackgroundJob;
 using LearnAwsMessaging.Contracts;
 
 namespace LearnAwsMessaging.Consumer;

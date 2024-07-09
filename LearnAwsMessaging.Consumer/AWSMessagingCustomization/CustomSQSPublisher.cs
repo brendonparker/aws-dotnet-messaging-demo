@@ -87,10 +87,12 @@ internal class CustomSQSPublisher : ISQSPublisher
                 
                 var queueUrl = GetPublisherEndpoint(trace, typeof(T), sqsOptions);
                 
+                // BEGIN Customization to introduce middleware
                 foreach (var middleware in _middlewareProvider.Resolve(queueUrl))
                 {
-                    sqsOptions = await middleware.HandleAsync(queueUrl, message, sqsOptions);
+                    sqsOptions = await middleware.HandleAsync(message, sqsOptions);
                 }
+                // END Customization to introduce middleware
                 
                 _logger.LogDebug("Creating the message envelope for the message of type '{MessageType}'.", typeof(T));
                 var messageEnvelope = await _envelopeSerializer.CreateEnvelopeAsync(message);
